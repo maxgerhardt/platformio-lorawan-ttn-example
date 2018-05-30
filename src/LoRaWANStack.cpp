@@ -127,6 +127,8 @@ bool LoRaWANStack_Send(uint8_t fport, const uint8_t* data, size_t len, bool conf
         retcode == LORAWAN_STATUS_WOULD_BLOCK ? printf("send - WOULD BLOCK\r\n")
                 : printf("\r\n send() - Error code %d \r\n", retcode);
         return false;
+    } else {
+    	printf("%d bytes scheduled for transmission\n", (int) retcode);
     }
 
     hexDump("lora tx data", data, len);

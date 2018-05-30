@@ -309,6 +309,7 @@ uint8_t SX1276_LoRaRadio::get_status(void)
  */
 void SX1276_LoRaRadio::set_channel(uint32_t freq)
 {
+	//printf("[SX1276] Set Freq %lu\n", freq);
     _rf_settings.channel = freq;
     freq = (uint32_t) ((double) freq / (double) FREQ_STEP);
     write_to_register(REG_FRFMSB, (uint8_t) ((freq >> 16) & 0xFF));
@@ -374,7 +375,8 @@ void SX1276_LoRaRadio::set_rx_config(radio_modems_t modem, uint32_t bandwidth,
                                      bool freq_hop_on, uint8_t hop_period,
                                      bool iq_inverted, bool rx_continuous)
 {
-    set_modem(modem);
+	//printf("[SX1276] RX DR %d BW %d\n", (int) datarate, (int) bandwidth);
+	set_modem(modem);
 
     switch (modem) {
         case MODEM_FSK:
@@ -541,6 +543,8 @@ void SX1276_LoRaRadio::set_tx_config(radio_modems_t modem, int8_t power,
                                      uint8_t hop_period, bool iq_inverted,
                                      uint32_t timeout)
 {
+	//printf("[SX1276] TX DR %d BW %d\n", (int) datarate, (int) bandwidth);
+
     set_modem(modem);
     set_rf_tx_power(power);
 
@@ -2014,6 +2018,7 @@ void SX1276_LoRaRadio::handle_dio0_irq()
                     // Clear Irq
                     write_to_register(REG_LR_IRQFLAGS, RFLR_IRQFLAGS_TXDONE);
                     // Intentional fall through
+                    //printf("TXDONE\n");
                 case MODEM_FSK:
                 default:
                     _rf_settings.state = RF_IDLE;
