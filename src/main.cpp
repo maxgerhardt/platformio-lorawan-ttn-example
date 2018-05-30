@@ -94,7 +94,9 @@ int main() {
 		printf("[+] LoRaWAN stack startup OK\n");
 	}
 
+#ifdef MBED_CONF_RTOS_PRESENT
 	SenderThread_Start();
+#endif
 
 	LoRaWANStack_ServeForever();
 

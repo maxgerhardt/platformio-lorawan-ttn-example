@@ -13,6 +13,7 @@
 #include "main.h" /* for LoRaWAN interface */
 #include "Debug.h"
 #include <project_settings.h>
+#include <SenderThread.h>
 
 using namespace events;
 
@@ -151,6 +152,13 @@ static void lora_event_handler(lorawan_event_t event)
         case CONNECTED:
             printf("\r\n Connection - Successful \r\n");
             isSending = false;
+
+#ifndef MBED_CONF_RTOS_PRESENT
+            //Tell event queue to call the transmission function
+            //in SENDER_TX_MILLIS milliseconds.
+            ev_queue.call_every(SENDER_TX_MILLIS, &SenderThread_DoSend);
+#endif
+
             break;
         case DISCONNECTED:
             ev_queue.break_dispatch();
